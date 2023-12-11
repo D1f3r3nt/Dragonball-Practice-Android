@@ -52,6 +52,9 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     // Glide
     implementation("com.github.bumptech.glide:glide:4.14.2")
+    // List
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
     
     
     testImplementation("junit:junit:4.13.2")

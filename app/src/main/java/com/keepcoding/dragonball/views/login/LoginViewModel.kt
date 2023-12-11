@@ -1,10 +1,8 @@
-package com.keepcoding.dragonball.viewmodel
+package com.keepcoding.dragonball.views.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.keepcoding.dragonball.commons.Error
 import com.keepcoding.dragonball.commons.Idle
-import com.keepcoding.dragonball.commons.Response
 import com.keepcoding.dragonball.commons.State
 import com.keepcoding.dragonball.network.NetworkConnection
 import kotlinx.coroutines.Dispatchers

@@ -1,4 +1,4 @@
-package com.keepcoding.dragonball.views
+package com.keepcoding.dragonball.views.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,10 +8,8 @@ import androidx.activity.viewModels
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.keepcoding.dragonball.commons.Error
-import com.keepcoding.dragonball.commons.Idle
 import com.keepcoding.dragonball.commons.Response
 import com.keepcoding.dragonball.databinding.ActivityLoginBinding
-import com.keepcoding.dragonball.viewmodel.LoginViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
