@@ -1,5 +1,6 @@
 package com.keepcoding.dragonball.views.login
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -9,7 +10,9 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.keepcoding.dragonball.commons.Error
 import com.keepcoding.dragonball.commons.Response
+import com.keepcoding.dragonball.commons.SharedPreferencesKeys
 import com.keepcoding.dragonball.databinding.ActivityLoginBinding
+import com.keepcoding.dragonball.views.home.HomeActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -22,21 +25,35 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
-        // TODO: Check if persistence
-        
+
+        checkSession()
+
         setListeners()
         setObservers()
     }
-    
+
     private fun handleErrorState(error: Error) {
         Toast.makeText(this, error.msg, Toast.LENGTH_LONG).show()
     }
 
     private fun handleResponseState(response: Response) {
-        // TODO: Save shared preference
+        getPreferences(Context.MODE_PRIVATE).edit().apply{
+            putString(SharedPreferencesKeys.TOKEN, response.response)
+            apply()
+        }
         
-        // TODO: Navigation
+        HomeActivity.go(this)
+    }
+
+    private fun checkSession() {
+        val token = getPreferences(MODE_PRIVATE).getString(SharedPreferencesKeys.TOKEN, "")
+        val alreadyLogged = token?.let {
+            it.isNotEmpty()
+        } ?: false
+
+        if (alreadyLogged) {
+            HomeActivity.go(this)
+        }
     }
 
     private fun setListeners() {
