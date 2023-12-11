@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".views.LoginActivity">
 
     <ImageView
         android:id="@+id/background"
@@ -44,7 +44,17 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:padding="8dp"
-            android:layout_marginBottom="20dp"
+            />
+        
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/usernameFormat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/incorrect_format"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="5dp"
             />
 
         <TextView
@@ -54,6 +64,7 @@
             android:textSize="20sp"
             android:textColor="@color/white"
             android:layout_marginBottom="5dp"
+            android:layout_marginTop="20dp"
             />
 
         <EditText
@@ -63,10 +74,21 @@
             android:background="@color/white"
             android:inputType="textPassword"
             android:padding="8dp"
-            android:layout_marginBottom="30dp"
+            />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/passwordFormat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/incorrect_format"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="5dp"
             />
         
         <Button
+            android:layout_marginTop="30dp"
             android:id="@+id/login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,6 +96,7 @@
             android:backgroundTint="@color/black_orange"
             android:layout_gravity="end"
             />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
