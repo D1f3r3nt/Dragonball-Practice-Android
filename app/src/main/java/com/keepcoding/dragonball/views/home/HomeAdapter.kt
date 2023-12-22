@@ -14,9 +14,16 @@ class HomeAdapter(val activity: HomeActivity): RecyclerView.Adapter<HomeAdapter.
     private var heroes = emptyList<Personaje>()
     
     class HomeViewHolder(private val  binding: ItemHomeBinding, val activity: HomeActivity): RecyclerView.ViewHolder(binding.root) {
-
+        
         fun show(hero: Personaje) {
             binding.name.text = hero.name
+            
+            if (hero.life == 0) {
+                binding.name.setBackgroundResource(R.color.grey)
+            } else {
+                binding.name.setBackgroundResource(R.color.black_orange)
+            }
+            
             Glide
                 .with(binding.root)
                 .load(hero.photo)
@@ -25,7 +32,9 @@ class HomeAdapter(val activity: HomeActivity): RecyclerView.Adapter<HomeAdapter.
                 .into(binding.background)
             
             binding.root.setOnClickListener {
-                Log.wtf("TEST", "Has tocado ${hero.name}")
+                if (hero.life > 0) {
+                    Log.wtf("TEST", "Has tocado ${hero.name}")   
+                }
             }
         }
 

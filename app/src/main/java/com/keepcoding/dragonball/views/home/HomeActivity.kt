@@ -10,9 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.keepcoding.dragonball.commons.Error
+import com.keepcoding.dragonball.commons.ProgressManager
 import com.keepcoding.dragonball.commons.ResponseHeroes
 import com.keepcoding.dragonball.commons.SharedPreferencesKeys
-import com.keepcoding.dragonball.data.Personaje
 import com.keepcoding.dragonball.databinding.ActivityHomeBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,15 +28,18 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var shared : SharedPreferences
+    private lateinit var sharedProgress : SharedPreferences
     private lateinit var token: String
     
     private val viewModel: HomeViewModel by viewModels()
     private val homeAdapter = HomeAdapter(this)
+    private val progressManager = ProgressManager()
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         shared = getSharedPreferences(SharedPreferencesKeys.FILE_PREFERENCE, Context.MODE_PRIVATE)
+        sharedProgress = getSharedPreferences(SharedPreferencesKeys.FILE_PROGRESS, Context.MODE_PRIVATE)
         token = shared.getString(SharedPreferencesKeys.TOKEN, "") ?: ""
         setContentView(binding.root)
         viewModel.getHeroes(token)
@@ -50,11 +53,9 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun handleResponseHeroesState(response: ResponseHeroes) {
-        homeAdapter.update(
-            response.heroes.map {
-                Personaje(it.name, it.photo, it.description, it.favorite, it.id, 100)
-            }
-        )
+        val heroes = progressManager.controlData(response, sharedProgress)
+        
+        homeAdapter.update(heroes)
     }
 
     fun setUpRecyclerView() {

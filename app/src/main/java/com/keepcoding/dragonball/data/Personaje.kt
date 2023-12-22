@@ -7,4 +7,5 @@ data class Personaje (
     val favorite: Boolean,
     val id: String,
     val life: Int,
+    val maxLife: Int,
 )
