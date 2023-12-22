@@ -1,6 +1,8 @@
 package com.keepcoding.dragonball.views.login
 
 import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -9,7 +11,7 @@ import androidx.activity.viewModels
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.keepcoding.dragonball.commons.Error
-import com.keepcoding.dragonball.commons.Response
+import com.keepcoding.dragonball.commons.ResponseToken
 import com.keepcoding.dragonball.commons.SharedPreferencesKeys
 import com.keepcoding.dragonball.databinding.ActivityLoginBinding
 import com.keepcoding.dragonball.views.home.HomeActivity
@@ -17,16 +19,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
+
+    companion object {
+        fun go(context: Context) {
+            val intent = Intent(context, LoginActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
     
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var shared : SharedPreferences
     private val viewModel: LoginViewModel by viewModels()
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
+        shared = getSharedPreferences(SharedPreferencesKeys.FILE_PREFERENCE, Context.MODE_PRIVATE)
         setContentView(binding.root)
-
-        checkSession()
 
         setListeners()
         setObservers()
@@ -36,24 +45,13 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(this, error.msg, Toast.LENGTH_LONG).show()
     }
 
-    private fun handleResponseState(response: Response) {
-        getPreferences(Context.MODE_PRIVATE).edit().apply{
-            putString(SharedPreferencesKeys.TOKEN, response.response)
+    private fun handleResponseTokenState(response: ResponseToken) {
+        shared.edit().apply{
+            putString(SharedPreferencesKeys.TOKEN, response.token)
             apply()
         }
         
         HomeActivity.go(this)
-    }
-
-    private fun checkSession() {
-        val token = getPreferences(MODE_PRIVATE).getString(SharedPreferencesKeys.TOKEN, "")
-        val alreadyLogged = token?.let {
-            it.isNotEmpty()
-        } ?: false
-
-        if (alreadyLogged) {
-            HomeActivity.go(this)
-        }
     }
 
     private fun setListeners() {
@@ -90,7 +88,7 @@ class LoginActivity : AppCompatActivity() {
             viewModel.state.collect{ state ->
                 when (state) {
                     is Error -> handleErrorState(state)
-                    is Response -> handleResponseState(state)
+                    is ResponseToken -> handleResponseTokenState(state)
                     else -> {}
                 }
             }
