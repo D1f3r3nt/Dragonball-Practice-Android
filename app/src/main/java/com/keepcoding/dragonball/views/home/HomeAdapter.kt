@@ -1,6 +1,5 @@
 package com.keepcoding.dragonball.views.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.keepcoding.dragonball.R
 import com.keepcoding.dragonball.data.Personaje
 import com.keepcoding.dragonball.databinding.ItemHomeBinding
+import com.keepcoding.dragonball.views.hero.HeroActivity
 
 class HomeAdapter(val activity: HomeActivity): RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
@@ -33,7 +33,7 @@ class HomeAdapter(val activity: HomeActivity): RecyclerView.Adapter<HomeAdapter.
             
             binding.root.setOnClickListener {
                 if (hero.life > 0) {
-                    Log.wtf("TEST", "Has tocado ${hero.name}")   
+                    HeroActivity.go(activity, hero)
                 }
             }
         }
