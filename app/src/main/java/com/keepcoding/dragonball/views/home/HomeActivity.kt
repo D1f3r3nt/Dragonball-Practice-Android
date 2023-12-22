@@ -4,14 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.keepcoding.dragonball.commons.Error
 import com.keepcoding.dragonball.commons.ResponseHeroes
 import com.keepcoding.dragonball.commons.SharedPreferencesKeys
+import com.keepcoding.dragonball.data.Personaje
 import com.keepcoding.dragonball.databinding.ActivityHomeBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var token: String
     
     private val viewModel: HomeViewModel by viewModels()
+    private val homeAdapter = HomeAdapter(this)
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +40,8 @@ class HomeActivity : AppCompatActivity() {
         token = shared.getString(SharedPreferencesKeys.TOKEN, "") ?: ""
         setContentView(binding.root)
         viewModel.getHeroes(token)
-        
+
+        setUpRecyclerView()
         setObservers()
     }
 
@@ -47,7 +50,16 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun handleResponseHeroesState(response: ResponseHeroes) {
-        Log.wtf("TEST", response.heroes.count().toString())
+        homeAdapter.update(
+            response.heroes.map {
+                Personaje(it.name, it.photo, it.description, it.favorite, it.id, 100)
+            }
+        )
+    }
+
+    fun setUpRecyclerView() {
+        binding.list.layoutManager = LinearLayoutManager(this)
+        binding.list.adapter = homeAdapter
     }
 
     private fun setObservers() {
