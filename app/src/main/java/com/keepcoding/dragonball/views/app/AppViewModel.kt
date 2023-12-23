@@ -19,9 +19,11 @@ class AppViewModel: ViewModel() {
     private val networkConnection = NetworkConnection()
     
     private val _state = MutableStateFlow<State>(Idle())
+    private val _heroes = MutableStateFlow<List<Personaje>>(emptyList())
     private val _heroeSelected = MutableStateFlow<Personaje?>(null)
 
     val state: StateFlow<State> = _state
+    val heroes: StateFlow<List<Personaje>> = _heroes
     val heroeSelected: StateFlow<Personaje?> = _heroeSelected
     
     private val progressManager = ProgressManager()
@@ -30,6 +32,10 @@ class AppViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             _state.value = networkConnection.getHeroes(token)
         }
+    }
+    
+    fun setHeroes(heroes: List<Personaje>) {
+        _heroes.value = heroes
     }
     
     fun setHeroeSelected(hero: Personaje?) {
@@ -55,11 +61,23 @@ class AppViewModel: ViewModel() {
         personaje?.let {
             it.life += 20
 
-            if (it.life > 100) {
-                it.life = 100
+            if (it.life > it.maxLife) {
+                it.life = it.maxLife
             }
             _heroeSelected.value = personaje
             progressManager.saveOne(sharedProgress, personaje)
         }
+    }
+
+    fun superCure(sharedProgress: SharedPreferences) {
+        val heroes = progressManager.controlData(_heroes.value, sharedProgress)
+        
+        val newHeroes: List<Personaje> = heroes.map { 
+            it.life = it.maxLife
+            it
+        }
+        
+        progressManager.fillBDD(newHeroes, sharedProgress)
+        _heroes.value = newHeroes
     }
 }

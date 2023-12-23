@@ -7,16 +7,21 @@ import com.keepcoding.dragonball.data.Personaje
 
 class ProgressManager {
     
-    fun controlData(response: ResponseHeroes, sharedProgress: SharedPreferences): List<Personaje> {
-        val apiHeroes = mapperToPersonaje(response)
-
+    fun controlData(apiHeroes: List<Personaje>, sharedProgress: SharedPreferences): List<Personaje> {
+        // Se mira si ya existe ese personaje, si existe lo devuelve, sino lo crea y devuelve el de la api
         val realHeroes = chooseData(apiHeroes, sharedProgress)
 
-        deleteBDD(sharedProgress)
-
+        // Vaciamos BDD y rellenamos con los heroes que han pasado el filtro
         fillBDD(realHeroes, sharedProgress)
         
+        // Devolvemos Personajes reales
         return realHeroes
+    }
+
+    fun fillBDD(realHeroes: List<Personaje>, sharedProgress: SharedPreferences) {
+        sharedProgress.edit { clear() }
+
+        realHeroes.forEach { personaje -> saveOne(sharedProgress, personaje) }
     }
 
     fun saveOne(sharedProgress: SharedPreferences, personaje: Personaje) {
@@ -26,23 +31,9 @@ class ProgressManager {
         }
     }
 
-    private fun fillBDD(realHeroes: List<Personaje>, sharedProgress: SharedPreferences) {
-        realHeroes.forEach { personaje -> saveOne(sharedProgress, personaje) }
-    }
-
-    private fun deleteBDD(sharedProgress: SharedPreferences) {
-        sharedProgress.edit { clear() }
-    }
-
     private fun chooseData(apiHeroes: List<Personaje>, sharedProgress: SharedPreferences) = apiHeroes.map { personaje ->
         val jsonPersonaje = sharedProgress.getString(personaje.id, Gson().toJson(personaje))
         Gson().fromJson(jsonPersonaje, Personaje::class.java)
-    }
-
-    private fun mapperToPersonaje(response: ResponseHeroes): List<Personaje> {
-        return response.heroes.map {
-            Personaje(it.name, it.photo, it.description, it.favorite, it.id, 100, 100)
-        }
     }
     
 }

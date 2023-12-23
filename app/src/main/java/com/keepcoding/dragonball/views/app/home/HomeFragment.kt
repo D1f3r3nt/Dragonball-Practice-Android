@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.keepcoding.dragonball.commons.Error
 import com.keepcoding.dragonball.commons.ProgressManager
 import com.keepcoding.dragonball.commons.ResponseHeroes
+import com.keepcoding.dragonball.data.Personaje
+import com.keepcoding.dragonball.data.PersonajeDto
 import com.keepcoding.dragonball.databinding.FragmentHomeBinding
 import com.keepcoding.dragonball.views.app.AppRouter
 import com.keepcoding.dragonball.views.app.AppViewModel
@@ -40,12 +42,8 @@ class HomeFragment(
         super.onViewCreated(view, savedInstanceState)
         
         setUpRecyclerView()
+        setListeners()
         setObservers()
-    }
-
-    fun setUpRecyclerView() {
-        binding.list.layoutManager = LinearLayoutManager(binding.root.context)
-        binding.list.adapter = homeAdapter
     }
 
     private fun handleErrorState(error: Error) {
@@ -53,9 +51,28 @@ class HomeFragment(
     }
 
     private fun handleResponseHeroesState(response: ResponseHeroes) {
-        val heroes = progressManager.controlData(response, sharedProgress)
+        val mapperToPersonaje = mapperToPersonaje(response.heroes)
 
-        homeAdapter.update(heroes)
+        val heroes = progressManager.controlData(mapperToPersonaje, sharedProgress)
+
+        viewModel.setHeroes(heroes)
+    }
+
+    private fun mapperToPersonaje(personajeDto: List<PersonajeDto>): List<Personaje> {
+        return personajeDto.map {
+            Personaje(it.name, it.photo, it.description, it.favorite, it.id, 100, 100)
+        }
+    }
+
+    fun setUpRecyclerView() {
+        binding.list.layoutManager = LinearLayoutManager(binding.root.context)
+        binding.list.adapter = homeAdapter
+    }
+
+    private fun setListeners() {
+        binding.superCure.setOnClickListener { 
+            viewModel.superCure(sharedProgress)
+        }
     }
 
     private fun setObservers() {
@@ -66,6 +83,12 @@ class HomeFragment(
                     is ResponseHeroes -> handleResponseHeroesState(state)
                     else -> {}
                 }
+            }
+        }
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.heroes.collect{ heroes ->
+                homeAdapter.update(heroes)
             }
         }
     }
