@@ -19,13 +19,15 @@ class ProgressManager {
         return realHeroes
     }
 
-    private fun fillBDD(realHeroes: List<Personaje>, sharedProgress: SharedPreferences) {
-        realHeroes.forEach { personaje ->
-            sharedProgress.edit().apply {
-                putString(personaje.id, Gson().toJson(personaje))
-                apply()
-            }
+    fun saveOne(sharedProgress: SharedPreferences, personaje: Personaje) {
+        sharedProgress.edit().apply {
+            putString(personaje.id, Gson().toJson(personaje))
+            apply()
         }
+    }
+
+    private fun fillBDD(realHeroes: List<Personaje>, sharedProgress: SharedPreferences) {
+        realHeroes.forEach { personaje -> saveOne(sharedProgress, personaje) }
     }
 
     private fun deleteBDD(sharedProgress: SharedPreferences) {

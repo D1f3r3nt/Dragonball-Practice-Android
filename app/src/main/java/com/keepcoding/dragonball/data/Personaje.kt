@@ -6,6 +6,6 @@ data class Personaje (
     val description: String,
     val favorite: Boolean,
     val id: String,
-    val life: Int,
+    var life: Int,
     val maxLife: Int,
 )

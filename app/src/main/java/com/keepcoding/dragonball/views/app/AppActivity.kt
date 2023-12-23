@@ -47,6 +47,8 @@ class AppActivity: AppCompatActivity(), AppRouter {
     }
 
     override fun showHome() {
+        viewModel.setHeroeSelected(null)
+        
         supportFragmentManager
             .beginTransaction()
             .replace(binding.frame.id, HomeFragment(this, sharedProgress))
@@ -54,9 +56,11 @@ class AppActivity: AppCompatActivity(), AppRouter {
     }
 
     override fun showHero(hero: Personaje) {
+        viewModel.setHeroeSelected(hero)
+        
         supportFragmentManager
             .beginTransaction()
-            .replace(binding.frame.id, HeroFragment(this, hero))
+            .replace(binding.frame.id, HeroFragment(this, sharedProgress))
             .addToBackStack(null)
             .commit()
     }
