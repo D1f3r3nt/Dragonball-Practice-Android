@@ -14,7 +14,7 @@ import com.keepcoding.dragonball.commons.Error
 import com.keepcoding.dragonball.commons.ResponseToken
 import com.keepcoding.dragonball.commons.SharedPreferencesKeys
 import com.keepcoding.dragonball.databinding.ActivityLoginBinding
-import com.keepcoding.dragonball.views.home.HomeActivity
+import com.keepcoding.dragonball.views.app.AppActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -51,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
             apply()
         }
         
-        HomeActivity.go(this)
+        AppActivity.go(this)
     }
 
     private fun setListeners() {

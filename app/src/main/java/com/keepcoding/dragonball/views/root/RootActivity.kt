@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.keepcoding.dragonball.commons.SharedPreferencesKeys
 import com.keepcoding.dragonball.databinding.ActivityRootBinding
-import com.keepcoding.dragonball.views.home.HomeActivity
+import com.keepcoding.dragonball.views.app.AppActivity
 import com.keepcoding.dragonball.views.login.LoginActivity
 
 class RootActivity : AppCompatActivity() {
@@ -30,7 +30,7 @@ class RootActivity : AppCompatActivity() {
         } ?: false
 
         if (alreadyLogged) {
-            HomeActivity.go(this)
+            AppActivity.go(this)
         } else {
             LoginActivity.go(this)
         }

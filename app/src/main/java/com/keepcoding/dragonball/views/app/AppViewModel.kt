@@ -1,4 +1,4 @@
-package com.keepcoding.dragonball.views.home
+package com.keepcoding.dragonball.views.app
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class HomeViewModel: ViewModel() {
+class AppViewModel: ViewModel() {
 
     private val networkConnection = NetworkConnection()
     

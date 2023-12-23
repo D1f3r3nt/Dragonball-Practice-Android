@@ -25,13 +25,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.home.HomeActivity"
+            android:name=".views.app.AppActivity"
             android:exported="false"/>
         <activity
             android:name=".views.login.LoginActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".views.hero.HeroActivity"
             android:exported="false"/>
     </application>
 

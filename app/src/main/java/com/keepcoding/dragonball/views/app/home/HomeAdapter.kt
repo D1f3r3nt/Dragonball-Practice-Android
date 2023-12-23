@@ -1,4 +1,4 @@
-package com.keepcoding.dragonball.views.home
+package com.keepcoding.dragonball.views.app.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,13 +7,13 @@ import com.bumptech.glide.Glide
 import com.keepcoding.dragonball.R
 import com.keepcoding.dragonball.data.Personaje
 import com.keepcoding.dragonball.databinding.ItemHomeBinding
-import com.keepcoding.dragonball.views.hero.HeroActivity
+import com.keepcoding.dragonball.views.app.AppRouter
 
-class HomeAdapter(val activity: HomeActivity): RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
+class HomeAdapter(val activity: AppRouter): RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
     private var heroes = emptyList<Personaje>()
     
-    class HomeViewHolder(private val  binding: ItemHomeBinding, val activity: HomeActivity): RecyclerView.ViewHolder(binding.root) {
+    class HomeViewHolder(private val  binding: ItemHomeBinding, val activity: AppRouter): RecyclerView.ViewHolder(binding.root) {
         
         fun show(hero: Personaje) {
             binding.name.text = hero.name
@@ -33,7 +33,7 @@ class HomeAdapter(val activity: HomeActivity): RecyclerView.Adapter<HomeAdapter.
             
             binding.root.setOnClickListener {
                 if (hero.life > 0) {
-                    HeroActivity.go(activity, hero)
+                    activity.showHero(hero)
                 }
             }
         }
