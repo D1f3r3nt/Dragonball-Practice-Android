@@ -45,6 +45,7 @@ class HeroFragment(
             }
             
             binding.life.progress = hero.life
+            binding.name.text = hero.name
             Glide
                 .with(binding.root)
                 .load(hero.photo)

@@ -2,6 +2,7 @@ package com.keepcoding.dragonball.views.app.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.keepcoding.dragonball.R
@@ -34,6 +35,8 @@ class HomeAdapter(val activity: AppRouter): RecyclerView.Adapter<HomeAdapter.Hom
             binding.root.setOnClickListener {
                 if (hero.life > 0) {
                     activity.showHero(hero)
+                } else {
+                    Toast.makeText(activity.getContext(), "No tiene vida", Toast.LENGTH_LONG).show()
                 }
             }
         }
